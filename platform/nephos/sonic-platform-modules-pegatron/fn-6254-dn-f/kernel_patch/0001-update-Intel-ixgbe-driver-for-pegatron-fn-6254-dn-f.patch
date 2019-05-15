@@ -1,6 +1,6 @@
-From 9204bacfb0946029baa1cb57a269f2f23b5149b0 Mon Sep 17 00:00:00 2001
+From ab7d94319424baaeece202229d72bf4e345a34f5 Mon Sep 17 00:00:00 2001
 From: PeterLin <peter5_lin@pegatroncorp.com>
-Date: Tue, 30 Apr 2019 17:43:32 +0800
+Date: Wed, 15 May 2019 10:43:24 +0800
 Subject: [PATCH] update Intel ixgbe driver for pegatron fn-6254-dn-f
 
 ---
@@ -1031,7 +1031,7 @@ index a137e06..6b23b74 100644
  	}
  
 diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index a5428b6..a969d70 100644
+index a5428b6..66753f1 100644
 --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
 +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
 @@ -84,7 +84,9 @@ static const struct ixgbe_info *ixgbe_info_tbl[] = {
@@ -1257,13 +1257,13 @@ index a5428b6..a969d70 100644
 -	strcpy(netdev->name, "eth%d");
 +
 +	/*2019/04/11, change OOB from eth2 to eth0, for pegatron fn-6524-dn-f, Peter5_Lin*/
-+	if(!strcmp("0000:03:00.0", pci_name(pdev)))
++	if(!strcmp("0000:04:00.0", pci_name(pdev)))
 +		strcpy(netdev->name, "eth0");
-+	else if(!strcmp("0000:03:00.1", pci_name(pdev)))
++	else if(!strcmp("0000:04:00.1", pci_name(pdev)))
 +		strcpy(netdev->name, "eth1");
-+	else if(!strcmp("0000:02:00.0", pci_name(pdev)))
++	else if(!strcmp("0000:03:00.0", pci_name(pdev)))
 +		strcpy(netdev->name, "eth2");
-+	else if(!strcmp("0000:02:00.1", pci_name(pdev)))
++	else if(!strcmp("0000:03:00.1", pci_name(pdev)))
 +		strcpy(netdev->name, "eth3");
 +
  	err = register_netdev(netdev);
