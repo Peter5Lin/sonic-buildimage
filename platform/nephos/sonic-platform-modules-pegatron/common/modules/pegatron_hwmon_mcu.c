@@ -42,10 +42,10 @@
 #define FAN_ENABLE_COMMAND              0x21
 #define FAN_LED_SETTO_MANUAL_COMMAND    0x30
 #define FAN_LED_SETTO_AUTO_COMMAND      0x31
-#define FAN_LED_GREENON_COMMAND         0x40
-#define FAN_LED_GREENOFF_COMMAND        0x41
-#define FAN_LED_AMBERON_COMMAND         0x50
-#define FAN_LED_AMBEROFF_COMMAND        0x51
+#define FAN_LED_GREENOFF_COMMAND        0x40
+#define FAN_LED_GREENON_COMMAND         0x41
+#define FAN_LED_AMBEROFF_COMMAND        0x50
+#define FAN_LED_AMBERON_COMMAND         0x51
 #define SMART_FAN_ENABLE_BIT            0
 #define SMART_FAN_SETTING_ENABLE_BIT    0
 #define SA56004X_REMOTE_TEMP_ALERT_BIT  4
@@ -723,9 +723,10 @@ static ssize_t get_fan_enable(struct device *dev, struct device_attribute *da,
 static ssize_t set_fan_enable(struct device *dev, struct device_attribute *da,
              const char *buf, size_t count)
 {
+    struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
     struct i2c_client *client = to_i2c_client(dev);   
     u8 data = 0;
-    u8 reg = SF_PWM_MID_REG;
+    u8 reg = FAN1_STATUS_REG + attr->index;
     long val = 0;
 
     if (kstrtol(buf, 10, &val))
@@ -762,9 +763,10 @@ static ssize_t get_fan_led_auto(struct device *dev, struct device_attribute *da,
 static ssize_t set_fan_led_auto(struct device *dev, struct device_attribute *da,
              const char *buf, size_t count)
 {
+    struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
     struct i2c_client *client = to_i2c_client(dev);   
     u8 data = 0;
-    u8 reg = SF_PWM_MID_REG;
+    u8 reg = FAN1_STATUS_REG + attr->index;
     long val = 0;
 
     if (kstrtol(buf, 10, &val))
@@ -801,9 +803,10 @@ static ssize_t get_fan_led_green(struct device *dev, struct device_attribute *da
 static ssize_t set_fan_led_green(struct device *dev, struct device_attribute *da,
              const char *buf, size_t count)
 {
+    struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
     struct i2c_client *client = to_i2c_client(dev);   
     u8 data = 0;
-    u8 reg = SF_PWM_MID_REG;
+    u8 reg = FAN1_STATUS_REG + attr->index;
     long val = 0;
 
     if (kstrtol(buf, 10, &val))
@@ -840,9 +843,10 @@ static ssize_t get_fan_led_amber(struct device *dev, struct device_attribute *da
 static ssize_t set_fan_led_amber(struct device *dev, struct device_attribute *da,
              const char *buf, size_t count)
 {
+    struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
     struct i2c_client *client = to_i2c_client(dev);   
     u8 data = 0;
-    u8 reg = SF_PWM_MID_REG;
+    u8 reg = FAN1_STATUS_REG + attr->index;
     long val = 0;
 
     if (kstrtol(buf, 10, &val))
@@ -1074,7 +1078,7 @@ static ssize_t get_adc_vol(struct device *dev, struct device_attribute *da,
     data = pega_hwmon_mcu_read(client, reg);
     DBG(printk(KERN_ALERT "%s - addr: 0x%x, reg: %x, data: %x\r\n", __func__, client->addr, reg, data));
 
-    return sprintf(buf, "%d.%02d\n", data/1000, (data/10)%12);
+    return sprintf(buf, "%d.%02d\n", data/1000, data%1000);
 }
 
 static ssize_t get_hwmon_temp(struct device *dev, struct device_attribute *da,
