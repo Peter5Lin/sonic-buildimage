@@ -29,7 +29,7 @@ CPLDA_SFP_NUM = 24
 CPLDB_SFP_NUM = 12
 CPLDC_SFP_NUM = 18
 
-kernel_module = ['i2c_dev', 'i2c-mux-pca954x force_deselect_on_exit=1', 'at24', 'pegatron_fn_6254_dn_f_cpld', 'pegatron_hwmon_mcu', 'pegatron_fn_6254_dn_f_sfp']
+kernel_module = ['i2c_dev', 'i2c-mux-pca954x force_deselect_on_exit=1', 'at24', 'pegatron_fn_6254_dn_f_cpld', 'pegatron_hwmon_mcu', 'pegatron_fn_6254_dn_f_sfp', 'pegatron_fn_6254_dn_f_ixgbe']
 moduleID = ['pca9544', 'pca9544', '24c02', 'pega_hwmon_mcu', 'fn_6254_dn_f_cpld', 'fn_6254_dn_f_cpld', 'fn_6254_dn_f_cpld', 'fn_6254_dn_f_sfpA', 'fn_6254_dn_f_sfpB', 'fn_6254_dn_f_sfpC']
 i2c_check_node = ['i2c-0', 'i2c-1']
 uninstall_check_node = ['-0072', '-0073']
@@ -58,7 +58,7 @@ def do_cmd(cmd, show):
 
 def install_driver():
 	status, output = do_cmd("depmod -a", 1)
-
+	
 	for i in range(0, len(kernel_module)):
 		status, output = do_cmd("modprobe " + kernel_module[i], 1)
 		if status:       
@@ -101,7 +101,6 @@ def do_install():
 
 	check_driver()
 	install_device()
-
 	return
 
 def do_uninstall():
